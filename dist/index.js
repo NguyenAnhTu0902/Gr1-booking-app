@@ -19,7 +19,7 @@ const auth_js_1 = __importDefault(require("./routes/auth.js"));
 const users_js_1 = __importDefault(require("./routes/users.js"));
 const hotels_js_1 = __importDefault(require("./routes/hotels.js"));
 const rooms_js_1 = __importDefault(require("./routes/rooms.js"));
-// const cookie_parser_1 = __importDefault(require("cookie-parser"));
+const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const app = (0, express_1.default)();
 dotenv_1.default.config();
 const connect = () => __awaiter(void 0, void 0, void 0, function* () {
@@ -31,12 +31,11 @@ const connect = () => __awaiter(void 0, void 0, void 0, function* () {
         throw error;
     }
 });
-mongoose.set('strictQuery', false);
 mongoose_1.default.connection.on('disconnected', () => {
     console.log('MongoDB disconnected!');
 });
 // Middlewares
-// app.use((0, cookie_parser_1.default)());
+app.use((0, cookie_parser_1.default)());
 app.use(express_1.default.json());
 app.use('/api/auth', auth_js_1.default);
 app.use('/api/users', users_js_1.default);
