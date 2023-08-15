@@ -3,9 +3,12 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "engines": {
+    "node": "16.x"
+  },
   "type": "module",
   "scripts": {
-    "start": "nodemon index.js"
+    "start": "node api/index.js"
   },
   "keywords": [],
   "author": "",
@@ -21,6 +24,7 @@
     "jsonwebtoken": "^9.0.1",
     "mongoose": "^6.11.4",
     "nodemon": "^2.0.20",
+    "res": "^0.4.0",
     "typescript": "^4.8.4"
   }
 }
