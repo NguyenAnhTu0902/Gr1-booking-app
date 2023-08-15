@@ -2,6 +2,7 @@ import User from '../models/User.js';
 import bcrypt from 'bcryptjs';
 import { createError } from '../utils/error.js';
 import jwt from 'jsonwebtoken';
+import { HTTP_EXCEPTION_ERROR_MESSAGES } from '../constants/errorMessage.js';
 import { HTTP_EXCEPTION_ERROR_CODE } from '../constants/errorMessage.js';
 
 export const register = async (req, res, next) => {
@@ -10,8 +11,9 @@ export const register = async (req, res, next) => {
     const hashedPassword = bcrypt.hashSync(req.body.password, salt);
 
     const newUser = new User({
-      username: req.body.username,
-      email: req.body.email,
+      // username: req.body.username,
+      // email: req.body.email,
+      ...req.body,
       password: hashedPassword,
     });
 
@@ -53,7 +55,7 @@ export const login = async (req, res, next) => {
     res
       .cookie('access_token', token, { httpOnly: true })
       .status(200)
-      .json({ ...otherDetails });
+      .json({ details: { ...otherDetails }, isAdmin });
   } catch (err) {
     next(err);
   }
