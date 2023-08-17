@@ -1,4 +1,5 @@
 import User from '../models/User.js';
+import Form from '../models/Form.js';
 
 export const updateUser = async (req, res, next) => {
   try {
@@ -33,10 +34,34 @@ export const getUser = async (req, res, next) => {
   }
 };
 
-export const getUsers = async (req, res, next) => {
+export const getAllUsers = async (req, res, next) => {
   try {
-    const allUsers = await User.find();
+    const allUsers = await User.find()
+      .limit(req.query.limit)
+      .skip(req.query.offset);
     res.status(200).json(allUsers);
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const getUserReservation = async (req, res, next) => {
+  try {
+    const userId = req.params.id;
+    const reservations = await Form.find({ userId: userId }).sort({
+      createdAt: -1,
+    });
+
+    res.status(200).json(reservations);
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const getUserCount = async (req, res, next) => {
+  try {
+    const userCount = await User.countDocuments({});
+    res.status(200).json(userCount);
   } catch (err) {
     next(err);
   }
