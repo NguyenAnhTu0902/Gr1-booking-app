@@ -1,22 +1,21 @@
 export const HTTP_EXCEPTION_ERROR_MESSAGES = {
-    FORBIDDEN_RESOURCE: 'Forbidden resource',
-    INVALID_JWT_TOKEN: 'Invalid token',
-    MISSING_JWT_TOKEN: 'Missing JWT token',
-    MISSING_DATA_PAYLOAD: 'Missing user data in payload',
-    USER_DOES_NOT_EXIST: "User doesn't exist! Please input another username!",
-    USER_NAME_MUST_UNIQUE: 'Username must be unique',
-    USER_EMAIL_MUST_UNIQUE: "User's email must be unique",
-    USER_NOT_AUTHENTICATED: 'Your are not authenticated!',
-    USER_NOT_AUTHORIZED: 'Your are not authorized!',
-    INVALID_PASSWORD: 'Invalid password! Please try again!',
-  
-    HOTEL_DOES_NOT_EXIST: 'Hotel does not exist',
-  
-    ROOM_DOES_NOT_EXIST: 'Room does not exist',
-  };
-  
-  export const HTTP_EXCEPTION_ERROR_CODE = {
-      // INTERNAL ERROR: 5XX
+  FORBIDDEN_RESOURCE: 'Forbidden resource',
+  INVALID_JWT_TOKEN: 'Invalid token',
+  MISSING_JWT_TOKEN: 'Missing JWT token',
+  MISSING_DATA_PAYLOAD: 'Missing user data in payload',
+  USER_DOES_NOT_EXIST: "User doesn't exist! Please input another username!",
+  USER_EMAIL_MUST_UNIQUE: "User's email must be unique",
+  USER_NOT_AUTHENTICATED: 'Your are not authenticated!',
+  USER_NOT_AUTHORIZED: 'Your are not authorized!',
+  INVALID_PASSWORD: 'Invalid password! Please try again!',
+
+  HOTEL_DOES_NOT_EXIST: 'Hotel does not exist',
+
+  ROOM_DOES_NOT_EXIST: 'Room does not exist',
+};
+
+export const HTTP_EXCEPTION_ERROR_CODE = {
+  // INTERNAL ERROR: 5XX
   FORBIDDEN_RESOURCE: 500,
   VALIDATION_ERROR: 501,
   JWT_VALIDATION_ERROR: 502,
@@ -55,7 +54,7 @@ export const HTTP_EXCEPTION_ERROR_MESSAGES = {
   ROOM_UPDATE_FAILED: 806,
   ROOM_DELETE_FAILED: 807,
 };
-  
-  export const HTTP_VALIDATION_ERROR_MESSAGE = {
-    IsUserExisted: 'User does not exist',
-  };
+
+export const HTTP_VALIDATION_ERROR_MESSAGE = {
+  IsUserExisted: 'User does not exist',
+};

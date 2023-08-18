@@ -11,8 +11,6 @@ export const register = async (req, res, next) => {
     const hashedPassword = bcrypt.hashSync(req.body.password, salt);
 
     const newUser = new User({
-      // username: req.body.username,
-      // email: req.body.email,
       ...req.body,
       password: hashedPassword,
     });
@@ -26,7 +24,7 @@ export const register = async (req, res, next) => {
 
 export const login = async (req, res, next) => {
   try {
-    const user = await User.findOne({ username: req.body.username });
+    const user = await User.findOne({ email: req.body.email });
     if (!user)
       return next(
         createError(
@@ -40,12 +38,13 @@ export const login = async (req, res, next) => {
       user.password,
     );
     if (!isPasswordCorrect)
-    return next(
-      createError(
-        HTTP_EXCEPTION_ERROR_CODE.INVALID_PASSWORD,
-        HTTP_EXCEPTION_ERROR_MESSAGES.INVALID_PASSWORD,
-      ),
-    );
+      return next(
+        createError(
+          HTTP_EXCEPTION_ERROR_CODE.INVALID_PASSWORD,
+          HTTP_EXCEPTION_ERROR_MESSAGES.INVALID_PASSWORD,
+        ),
+      );
+
     const token = jwt.sign(
       { id: user.id, isAdmin: user.isAdmin },
       process.env.JWT_SECRET,

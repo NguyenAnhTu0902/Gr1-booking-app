@@ -45,13 +45,64 @@ export const getHotel = async (req, res, next) => {
   }
 };
 
-export const getHotels = async (req, res, next) => {
-  const { min, max, ...others } = req.query;
+export const getAllHotels = async (req, res, next) => {
+  const { min, max, distance, ...others } = req.query;
   try {
-    const allHotels = await Hotel.find({
+    let allHotels = await Hotel.find({
       ...others,
       cheapestPrice: { $gte: min || 1, $lte: max || 999 },
-    }).limit(req.query.limit);
+    })
+      .limit(req.query.limit)
+      .skip(req.query.offset);
+
+    // Filter by hotel's distance from center of the city (Find hotels have distance less or equal than) - OR
+    if (distance) {
+      allHotels = await allHotels.filter((hotel) =>
+        // If distance is 'string' => has to convert to array first
+        typeof distance === 'string'
+          ? parseInt(hotel.distance) <= parseInt(distance)
+          : parseInt(hotel.distance) <= Math.max(...distance),
+      );
+    }
+
+    // Filter by hotel tag (Find hotels includes all the tags) - AND
+    if (req.query.hotelTag) {
+      allHotels = await allHotels.filter((hotel) =>
+        // If tag is 'string' => has to convert to array first
+        typeof req.query.hotelTag === 'string'
+          ? req.query.hotelTag.split().every((v) => hotel.tags.includes(v))
+          : req.query.hotelTag.every((v) => hotel.tags.includes(v)),
+      );
+    }
+
+    // Filter by room tag (Find hotels have rooms include all the tags) - AND
+    if (req.query.roomTag) {
+      const result = await Promise.all(
+        allHotels.map(async (hotel) => {
+          const roomList = await Promise.all(
+            hotel.rooms.map((roomId) => {
+              return Room.findById(roomId);
+            }),
+          );
+
+          const res = roomList.map((room) =>
+            // If tag is 'string' => has to convert to array first
+            typeof req.query.roomTag === 'string'
+              ? req.query.roomTag.split().every((v) => room.tags.includes(v))
+              : req.query.roomTag.every((v) => room.tags.includes(v)),
+          );
+          if (res.some((element) => element === true)) {
+            return true;
+          }
+          return false;
+        }),
+      );
+
+      allHotels = allHotels.filter((_, index) => {
+        return result[index];
+      });
+    }
+
     res.status(200).json(allHotels);
   } catch (err) {
     next(err);
@@ -74,7 +125,7 @@ export const countByCity = async (req, res, next) => {
 
 export const countByType = async (req, res, next) => {
   try {
-    const hotelCount = await Hotel.countDocuments({ type: 'Hotels' });
+    const hotelCount = await Hotel.countDocuments({ type: 'hotel' });
     const apartmentCount = await Hotel.countDocuments({ type: 'apartment' });
     const resortCount = await Hotel.countDocuments({ type: 'resort' });
     const villaCount = await Hotel.countDocuments({ type: 'villa' });
@@ -102,6 +153,15 @@ export const getHotelRooms = async (req, res, next) => {
     );
 
     res.status(200).json(roomList);
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const getHotelCount = async (req, res, next) => {
+  try {
+    const hotelCount = await Hotel.countDocuments({});
+    res.status(200).json(hotelCount);
   } catch (err) {
     next(err);
   }

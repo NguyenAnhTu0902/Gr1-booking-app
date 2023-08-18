@@ -5,13 +5,17 @@ import {
   createHotel,
   deleteHotel,
   getHotel,
-  getHotels,
-  updateHotel,
   getHotelRooms,
+  getAllHotels,
+  updateHotel,
+  getHotelCount,
 } from '../controllers/hotel.js';
 import { verifyAdmin } from '../utils/verifyToken.js';
 
 const router = express.Router();
+
+// Get all hotel's count
+router.get('/count', getHotelCount);
 
 // Create
 // router.post('/', verifyAdmin, createHotel);
@@ -19,7 +23,7 @@ router.post('/', createHotel);
 
 // Update
 // router.put('/:id', verifyAdmin, updateHotel);
-router.post('/', createHotel);
+router.put('/:id', updateHotel);
 
 // Delete
 // router.delete('/:id', verifyAdmin, deleteHotel);
@@ -29,7 +33,7 @@ router.delete('/:id', deleteHotel);
 router.get('/:id', getHotel);
 
 // Get all
-router.get('/', getHotels);
+router.get('/', getAllHotels);
 router.get('/count/byCity', countByCity);
 router.get('/count/byType', countByType);
 router.get('/room/:hotelId', getHotelRooms);
